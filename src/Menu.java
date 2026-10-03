@@ -14,17 +14,18 @@ public class Menu
         System.out.println("Enter your surname: ");
         t_surname = scanner.nextLine();
     
-        System.out.println("Enter route: ");
-        t_route = scanner.nextLine();
-
+        
         System.out.println("Enter the starting point of your journey: ");
         t_start = scanner.nextLine();
-
+        
         System.out.println("Enter your final destination: ");
         t_destination = scanner.nextLine();
-
+        
+        System.out.println("Enter route: ");
+        t_route = scanner.nextLine();
+        
         Person activePerson = new Person(t_name, t_surname, t_route, t_start, t_destination);
-        activePerson.getLeapCard().printDetails();
+        System.out.println(activePerson.getLeapCard().getStops("resources/routes.txt", t_destination, t_route));
 
         scanner.close();
     }

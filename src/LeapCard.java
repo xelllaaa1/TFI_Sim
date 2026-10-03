@@ -89,4 +89,43 @@ public class LeapCard
             System.out.println(history.get(i));
         }
     }
+
+    public ArrayList<String> getStops(String path, String destination, String route)
+    {
+        try(BufferedReader reader = new BufferedReader(new FileReader(path)))
+        {
+            String currRoute;
+            int start = 0;
+            
+            while((currRoute = reader.readLine()) != null)
+            {
+                start = currRoute.indexOf(':');
+
+                if(currRoute.substring(0, start).equals(route))
+                {
+                    break;
+                }
+            }
+
+            if(currRoute == null)
+            {
+                System.out.println("Could not find route " + route);
+                return null;
+            }
+
+            ArrayList<String> stops = new ArrayList<String>(Arrays.asList(currRoute.substring(start + 1).split(",")));
+
+            for(int i = 0; i < stops.size(); i++)
+            {
+                stops.set(i, stops.get(i).strip());
+            }
+
+            return stops;
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
