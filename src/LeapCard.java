@@ -17,6 +17,9 @@ public class LeapCard
         history.add("Card #" + cardNumber + " activated.");
         
         this.owner = owner;
+        
+        if(owner.getAge() < 16) type = "Child";
+        else if(owner.getAge() <= 25) type = "Young Adult / Student";
     }
 
     // Getters and setters for instance variables
@@ -127,5 +130,65 @@ public class LeapCard
             e.printStackTrace();
             return null;
         }
+    }
+
+    public double calculateFare(ArrayList<String> stops, Person person)
+    {
+        String start = person.getStart();
+        String destination = person.getDestination();
+        String type = person.getLeapCard().getType();
+
+        if(start.equals(destination)) return 0.0;
+        System.out.println("\n\n\nStops count > 0\n");
+
+        // Variables for fare calculation
+        final int short_trip = 5, medium_trip = 20, long_trip = 45;
+        double fare = 0.0;
+        int count = 0;
+
+        // Count stops
+        int i = 0;
+        while(!stops.get(i).equals(destination))
+        {
+            count += 1;
+            System.out.println("\"" + stops.get(i) + "\" = " + "\"" + destination +"\"?");
+            System.out.println("Count = " + count);
+            System.out.println("Current stop = "+ stops.get(i));
+            i++;
+        }
+
+        // Handling different fare rates according to card type
+        switch(type)
+        {
+            case "Adult" -> {
+                if(count <= short_trip) fare = 1.0;
+                else if(count <= medium_trip) fare = 1.5;
+                else if(count <= long_trip) fare = 2.5;
+                else fare = 4.15;
+            }
+
+            case "Young adult / Student" -> {
+                if(count <= short_trip) fare = 0.75;
+                else if(count <= medium_trip) fare = 1.0;
+                else if(count <= long_trip) fare = 1.7;
+                else fare = 3.0;
+            }
+
+            case "Child" -> {
+                if(count <= short_trip) fare = 0.5;
+                else if(count <= medium_trip) fare = 0.8;
+                else if(count <= long_trip) fare = 1.5;
+                else fare = 2.3;
+            }
+
+            default -> {return 2.5;}
+        }
+
+        return fare;
+    }
+
+    public double calculateTime(int stop_count, int time_per_stop)
+    {
+        return 1.0;
     }
 }
