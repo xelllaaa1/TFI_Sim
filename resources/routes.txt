@@ -1,3 +1,31 @@
-15: Ballycullen Road, Woodstown Avenue, Woodstown SC, Woodstown
-15B: 1, 2, 3, 4
-L58: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+15: Ballycullen Road, Stocking Avenue, Hunters Crescent, Scholarstown Road, Templeogue Bridge, Templeogue Post Office, Terenure Cross, Rathgar Road, Rathmines Road, Camden Street, South Great George's Street, Dame Street, Eden Quay, Connolly Station, Fairview, Donnycarney Church, Artane Roundabout, Coolock Junction, Clare Hall, Hole in the Wall Road, Clongriffin Station
+15B: Stocking Avenue, Ballyroan Road, Rathfarnham Shopping Centre, Terenure Cross, Rathgar Road, Rathmines Road, Camden Street, Aungier Street, Dame Street, Trinity College, Merrion Square, Grand Canal Dock
+16: Ballinteer (Kingston), Grange Road, Marley Park, Rathfarnham Castle, Terenure Cross, Harold's Cross Green, Kelly's Corner, Camden Street, South Great George's Street, O'Connell Street, Drumcondra Rail Station, Skylon Hotel, Whitehall, Swords Road, Santry Stadium, Dublin Airport
+46A: Dun Laoghaire (Crofton Road), Tivoli Road, Mounttown Road, Kill Avenue, Baker's Corner, Deansgrange Cross, Foxrock Church, Stillorgan Shopping Centre, UCD Slip Road, Donnybrook Church, Morehampton Road, Leeson Street Bridge, Dawson Street, O'Connell Street, Blessington Street, Berkeley Road, Phibsborough (Doyle's Corner), North Circular Road, Phoenix Park (Infirmary Road)
+39A: Ongar Village, Hartstown Road, Blanchardstown Shopping Centre, Navan Road (Auburn Ave), Navan Road (Ashtown Roundabout), Cabra Cross, Stoneybatter, Usher's Quay, O'Connell Bridge, Baggot Street Bridge, Waterloo Road, Donnybrook Church, UCD Belfield
+27: Jobstown, Tallaght Hospital, Tallaght LUAS, Square Shopping Centre, Tymon Park, Walkinstown Roundabout, Dolphin's Barn, Cork Street, Patrick Street, Dame Street, Eden Quay, Connolly Station, Fairview, Malahide Road, Donnycarney Church, Artane Roundabout, Priorswood, Clare Hall
+41: Lower Abbey Street, Gardiner Street, Drumcondra Rail Station, Skylon Hotel, Santry Avenue, Dublin Airport, Boroimhe, Swords Main Street, Rathbeale Road, Swords Manor
+C1: Adamstown Station, Lucan Shopping Centre, Lucan Road, Palmerstown Village, Ballyfermot Road, Chapelizod Bypass, Heuston Station, Aston Quay, Custom House Quay, Grand Canal Dock, Ringsend Road
+C2: Adamstown Station, Finnstown, Lucan Village, Liffey Valley Shopping Centre, Palmerstown Village, Chapelizod, Heuston Station, Eden Quay, IFSC, Grand Canal Dock, Ringsend Road
+G1: Red Cow LUAS, Ballyfermot Road, Ballyfermot College, St John's Road, Kilmainham, Thomas Street, Dame Street, College Green, Eden Quay, Connolly Station, Spencer Dock
+G2: Liffey Valley Shopping Centre, Coldcut Road, Ballyfermot Road, Emmet Road, Inchicore, Thomas Street, Lord Edward Street, Dame Street, Eden Quay, Custom House Quay, Spencer Dock
+H1: Lower Abbey Street, Connolly Station, Fairview, Malahide Road, Donnycarney, Artane, Raheny Village, Howth Road, Baldoyle Library, Coast Road Baldoyle
+H2: Lower Abbey Street, Connolly Station, Fairview, Clontarf Road, Howth Road, Raheny Village, Kilbarrack Road, Baldoyle, Portmarnock, Malahide Village
+H3: Lower Abbey Street, Connolly Station, Fairview, Clontarf Road, Bull Island Promenade, Raheny Road, Sutton Cross, Howth Village, Howth Harbour, Howth Summit
+9: Charlestown Shopping Centre, Finglas Village, Botanic Gardens, Phibsborough, Western Way, O'Connell Street, Dame Street, South Great George's Street, Harold's Cross Green, Kimmage Road Lower, Terenure Road North, Greenhills Road, Limekiln Avenue
+83: Harristown, Finglas South, McKee Road, Botanic Road, Phibsborough, Church Street, Four Courts, Dame Street, Aungier Street, Richmond Street, Rathmines, Kimmage Road Lower, Kimmage
+123: Walkinstown (Kilnamanagh Road), Drimnagh Road, St James's Hospital, Thomas Street, Dame Street, O'Connell Street, Sean McDermott Street, Fairview, Marino (Griffith Avenue)
+14: Dundrum LUAS, Churchtown, Ballinteer Road, Rathfarnham Road, Terenure Cross, Rathmines, Camden Street, South Great George's Street, Eden Quay, Connolly Station, Fairview, Marino, Donnycarney, Beaumont Hospital
+140: IKEA, Charlestown Shopping Centre, Finglas Road, St Vincent's Hospital, Phibsborough, Broadstone, O'Connell Street, Dame Street, Camden Street, Rathmines Road, Rathmines
+13: Grange Castle, Clondalkin Village, Bluebell LUAS, Inchicore, Thomas Street, Dame Street, O'Connell Street, Drumcondra Station, Ballymun Road, DCU, Ballymun Shopping Centre, Harristown
+26: Liffey Valley Shopping Centre, Palmerstown Village, Chapelizod, Con Colbert Road, Heuston Station, Wolfe Tone Quay, Ormonde Quay, O'Connell Bridge, Dawson Street, Merrion Square
+33: Lower Abbey Street, Drumcondra Station, Santry, Swords Main Street, Lusk Village, Rush and Lusk Station, Skerries Rail Station, Balbriggan Main Street
+40: Charlestown Shopping Centre, Finglas Village, Clearwater Shopping Centre, Phibsborough, O'Connell Street, Lord Edward Street, Mount Brown, St James's Hospital, Inchicore, Ballyfermot Road, Liffey Valley Shopping Centre
+68: Greenogue Business Park, Newcastle Village, Rathcoole, Clondalkin, Monastery Road, Inchicore, South Circular Road, Camden Street, Hawkins Street
+70: Dunboyne Main Street, Clonee Village, Blanchardstown Centre, Navan Road, Cabra Cross, Stoneybatter, Four Courts, Aston Quay, Dawson Street, Burlington Road
+77A: Citywest Shopping Centre, Tallaght Hospital, The Square Tallaght, Old Bawn Road, Tymon Park, Walkinstown Cross, Dolphin's Barn, Cork Street, Patrick Street, Eden Quay
+145: Heuston Station, Aston Quay, Dawson Street, Leeson Street, Donnybrook, Stillorgan Bypass, Cornelscourt, Bray Main Street, Kilmacanogue
+155: IKEA, DCU Ballymun, Drumcondra Station, O'Connell Street, Dawson Street, Donnybrook, Stillorgan Road, Cabinteely, Shankill Village, Bray Rail Station
+122: Ashington (Navan Road), Cabra Road, Phibsborough, Mater Hospital, O'Connell Street, Dame Street, Cork Street, Crumlin Hospital, Drimnagh (Mourne Road)
+L58: Riverwood, Coolmine Rail Station, Blanchardstown Centre, Ongar, Leixlip Confey Station, Leixlip Connaught Street
+TEST: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
