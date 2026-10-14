@@ -5,7 +5,7 @@ import java.time.*;
 public class LeapCard
 {
     private String cardNumber;
-    private double balance = 0;
+    private double balance = 10;
     private String type = "Adult";
     private int current_time;
     private Person owner;
@@ -68,11 +68,9 @@ public class LeapCard
     // Useful functions
     public void printDetails()
     {
+        System.out.println("Here are your private details, as requested:");
         System.out.println("\nName: " + owner.getName() + " " + owner.getSurname());
-        System.out.println("Current route: " + owner.getRoute());
-        System.out.println("Start: " + owner.getStart());
-        System.out.println("Destination: " + owner.getDestination());
-        System.out.println("\nBalance: " + balance);
+        System.out.println("Balance: " + balance);
         System.out.println("Card Type: " + type);
         System.out.println("Card Number: " + cardNumber);
     }
@@ -259,6 +257,6 @@ public class LeapCard
             }
         }
 
-        return time_per_stop * stop_count;
+        return time_per_stop * stop_count * 2;
     }
 }
