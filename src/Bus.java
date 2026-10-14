@@ -25,7 +25,11 @@ public class Bus
         people_on_board = Menu.random.nextInt(0, 96);
 
         // Determine bus service and fullness.
-        if(service == 1) state = State.NIS;
+        if(service == 1)
+        {
+            state = State.NIS;
+            people_on_board = 0;
+        }
 
         else
         {

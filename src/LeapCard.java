@@ -10,6 +10,8 @@ public class LeapCard
     private int current_time;
     private Person owner;
 
+    private String start, destination, route;
+
     enum Traffic {HEAVY, MODERATE, LIGHT, NONE}
     Traffic traffic;
 
@@ -60,9 +62,39 @@ public class LeapCard
         return traffic;
     }
 
+    public String getStart()
+    {
+        return start;
+    }
+
+    public String getDestination()
+    {
+        return destination;
+    }
+
+    public String getRoute()
+    {
+        return route;
+    }
+
     public void setType(String type)
     {
         this.type = type;
+    }
+
+    public void setStart(String start)
+    {
+        this.start = start;
+    }
+
+    public void setDestination(String destination)
+    {
+        this.destination = destination;
+    }
+
+    public void setRoute(String route)
+    {
+        this.route = route;
     }
 
     // Useful functions
@@ -161,11 +193,11 @@ public class LeapCard
         return to - from;
     }
 
-    public double calculateFare(ArrayList<String> stops, Person person)
+    public double calculateFare(ArrayList<String> stops, LeapCard leap)
     {
-        String start = person.getStart();
-        String destination = person.getDestination();
-        String type = person.getLeapCard().getType();
+        String start = leap.getStart();
+        String destination = leap.getDestination();
+        String type = getType();
 
         if(start.equals(destination)) return 0.0;
         /* DEBUG System.out.println("\n\n\nStops count > 0\n"); */
@@ -257,6 +289,6 @@ public class LeapCard
             }
         }
 
-        return time_per_stop * stop_count * 2;
+        return time_per_stop * stop_count;
     }
 }

@@ -27,26 +27,27 @@ public class Menu
         return new Person(name, surname, null, null, null, age);
     }
 
-    public void catchBus(LeapCard leap)
+    public void catchBus(Person user, LeapCard leap)
     {
         System.out.print("What bus are we thinking?: ");
-        String bus_route = scanner.nextLine();
+        leap.setRoute(scanner.nextLine());
         
         // Get all the information needed.
-        ArrayList<String> bus_stops = leap.getStopsNames("resources/routes.txt", bus_route);
+        ArrayList<String> bus_stops = leap.getStopsNames("resources/routes.txt", leap.getRoute());
         
         System.out.print("Where exactly are we?... : ");
-        String start = scanner.nextLine();
+        leap.setStart(scanner.nextLine());
 
         System.out.print("Where are we going?: ");
-        String destination = scanner.nextLine();
+        leap.setDestination(scanner.nextLine());
 
         // Create a bus coming from nowhere.
         Bus bus = new Bus();
         bus.goodOrBadBus();
+        
+        leap.spendBalance(leap.calculateFare(bus_stops, leap));
+        System.out.println("Total time spent: " + leap.calculateTime(leap.countStopsTillDestination(bus_stops, leap.getStart(), leap.getDestination())));
     }
-
-
 
     public void menu(Person user, LeapCard leap)
     {
@@ -58,8 +59,13 @@ public class Menu
 
         while(in_use)
         {
-            catchBus(leap);
-            in_use = false;
+            catchBus(user, leap);
+            leap.printDetails();
+
+            System.out.print("Anywhere else you wanna go?: (Say 'yes' to proceed, 'no' to stay here.): ");
+            String answer = scanner.nextLine();
+
+            if(!answer.equalsIgnoreCase("yes")) in_use = false;
         }
     }
 
