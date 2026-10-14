@@ -1,6 +1,6 @@
 public class Person
 {
-    private String name, surname, current_route, start, destination;
+    private String name, surname;
     private int age;
     private LeapCard leapCard;
 
@@ -9,9 +9,6 @@ public class Person
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.current_route = current_route;
-        this.start = start;
-        this.destination = destination;
 
         this.leapCard = new LeapCard(this);
     }
@@ -31,30 +28,9 @@ public class Person
         return age;
     }
 
-    public String getRoute()
-    {
-        return current_route;
-    }
-    
-    public String getStart()
-    {
-        return start;
-    }
-
-    public String getDestination()
-    {
-        return destination;
-    }
-
-
     public LeapCard getLeapCard()
     {
         return leapCard;
-    }
-
-    public void setRoute(String route)
-    {
-        current_route = route;
     }
 
     public void getDetails()
@@ -62,8 +38,5 @@ public class Person
         System.out.println("Name: " + name);
         System.out.println("Surname: " + surname);
         System.out.println("Age: " + age);
-        System.out.println("Route: " + current_route);
-        System.out.println("Start: " + start);
-        System.out.println("Destination: " + destination);
     }
 }
