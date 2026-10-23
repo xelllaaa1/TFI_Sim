@@ -6,10 +6,12 @@ See the [release history](https://github.com/xelllaaa1/TFI_Sim/releases) for wha
 ## How to run
 1. Download the *src* and *resources* folders.
 2. Compile the Java source files together.
-3. Run the program.
+3. Run the program through class Main.
 
 ## Future Plans
 - Yes, it is called **"TFI"**, not **Dublin Bus** Simulator. I am planning to add more transportation types to this program in the future.
 - More random event encounters, like already present bus full/not in service events.
+- Add an interactive GUI.
+- Add genuine navigation from point A to point B using algorithms.
 
-### Total Time Spent: 12 hours.
+### Total Time Spent: 14 hours.
