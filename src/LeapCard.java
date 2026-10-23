@@ -1,6 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.time.LocalTime;
 import java.io.*;
-import java.time.*;
 
 public class LeapCard
 {
@@ -11,16 +12,18 @@ public class LeapCard
     private Person owner;
 
     private String start, destination, route;
+    private double trip_fare;
 
     enum Traffic {HEAVY, MODERATE, LIGHT, NONE}
+    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, BACKWARD_DIRECTION, ZERO_STOPS, VALID}
+
     Traffic traffic;
 
     private ArrayList<String> history = new ArrayList<String>();
 
     public LeapCard(Person owner)
     {
-        Random random = new Random();
-        cardNumber = String.format("%08d", random.nextInt(100000000));
+        cardNumber = String.format("%08d", Utility.random.nextInt(100000000));
         history.add("Card #" + cardNumber + " activated.");
         
         this.owner = owner;
@@ -77,6 +80,11 @@ public class LeapCard
         return route;
     }
 
+    public double getTripFare()
+    {
+        return trip_fare;
+    }
+
     public void setType(String type)
     {
         this.type = type;
@@ -97,14 +105,18 @@ public class LeapCard
         this.route = route;
     }
 
-    // Useful functions
-    public void printDetails()
+    public void setTripFare(double trip_fare)
     {
-        System.out.println("Here are your private details, as requested:");
-        System.out.println("\nName: " + owner.getName() + " " + owner.getSurname());
+        this.trip_fare = trip_fare;
+    }
+
+    // Useful functions
+    public void printLeapCardDetails()
+    {
+        System.out.println("Name: " + owner.getName() + " " + owner.getSurname());
         System.out.println("Balance: " + balance);
         System.out.println("Card Type: " + type);
-        System.out.println("Card Number: " + cardNumber);
+        System.out.println("Card Number: " + cardNumber + "\n");
     }
 
     public void printStopsEnRoute(ArrayList<String> stops, int start, int destination)
@@ -144,7 +156,7 @@ public class LeapCard
         }
     }
 
-    public ArrayList<String> getStopsNames(String path, String route)
+    public ArrayList<String> getStopsNames(String path)
     {
         try(BufferedReader reader = new BufferedReader(new FileReader(path)))
         {
@@ -161,9 +173,13 @@ public class LeapCard
                 }
             }
 
+            /* TODO: Do something about nulls since they can intervene with
+            the output of validateTrip() */
+            /* Well, routes.txt will be predefined for everyone, so I can
+            get away with saying that if this returns null because of an incorrect file
+            it is me to blame for putting in a wrong path. */
             if(currRoute == null)
             {
-                System.out.println("Could not find route " + route);
                 return null;
             }
 
@@ -185,6 +201,9 @@ public class LeapCard
 
     public int countStopsTillDestination(ArrayList<String> stops, String start, String destination)
     {
+        if(stops == null) return -1;
+        if(stops.isEmpty()) return -1;
+
         int from = stops.indexOf(start);
         int to = stops.indexOf(destination);
 
@@ -193,10 +212,10 @@ public class LeapCard
         return to - from;
     }
 
-    public double calculateFare(ArrayList<String> stops, LeapCard leap)
+    public double calculateFare(ArrayList<String> stops)
     {
-        String start = leap.getStart();
-        String destination = leap.getDestination();
+        String start = getStart();
+        String destination = getDestination();
         String type = getType();
 
         if(start.equals(destination)) return 0.0;
@@ -205,21 +224,10 @@ public class LeapCard
         // Variables for fare calculation
         final int short_trip = 5, medium_trip = 20, long_trip = 45;
         double fare = 0.0;
-        int count = 0;
 
-        // Count stops
-        int i = 0;
-        while(!stops.get(i).equals(destination))
-        {
-            count += 1;
-            
-            //DEBUG
-            System.out.println("\"" + stops.get(i) + "\" = " + "\"" + destination +"\"?");
-            System.out.println("Count = " + count);
-            System.out.println("Current stop = "+ stops.get(i));
-            
-            i++;
-        }
+        // count = stops travelled
+        int count = countStopsTillDestination(stops, start, destination);
+
         System.out.println("DEBUG: Final count = " + count);
 
         // Handling different fare rates according to card type
@@ -290,5 +298,25 @@ public class LeapCard
         }
 
         return time_per_stop * stop_count;
+    }
+
+    public Validation validateTrip()
+    {
+        ArrayList<String> stops = getStopsNames("resources/routes.txt");
+
+        if(stops == null)
+            return Validation.BAD_ROUTE;
+
+        else if(!stops.contains(start))
+            return Validation.BAD_START;
+
+        else if(!stops.contains(destination))
+            return Validation.BAD_DESTINATION;
+
+        int distance = countStopsTillDestination(stops, start, destination);
+        if(distance == -1) return Validation.BACKWARD_DIRECTION;
+        else if(distance == 0) return Validation.ZERO_STOPS;
+
+        return Validation.VALID;
     }
 }

@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 public class Person
 {
     private String name, surname;
     private int age;
     private LeapCard leapCard;
 
-    public Person(String name, String surname, String current_route, String start, String destination, int age)
+    public Person(String name, String surname, int age)
     {
         this.name = name;
         this.surname = surname;
@@ -33,7 +35,25 @@ public class Person
         return leapCard;
     }
 
-    public void getDetails()
+    public double travel(Bus bus)
+    {
+        final double TRIP_FAILED = -1.0;
+
+        if(getLeapCard().validateTrip() != LeapCard.Validation.VALID) return TRIP_FAILED;
+
+        ArrayList<String> stops = getLeapCard().getStopsNames("resources/routes.txt");
+        bus.waitForBus();
+
+        double trip_fare = getLeapCard().calculateFare(stops);
+
+        getLeapCard().setTripFare(trip_fare);
+
+        getLeapCard().spendBalance(trip_fare);
+
+        return getLeapCard().calculateTime(getLeapCard().countStopsTillDestination(stops, getLeapCard().getStart(), getLeapCard().getDestination()));
+    }
+
+    public void printPersonDetails()
     {
         System.out.println("Name: " + name);
         System.out.println("Surname: " + surname);
