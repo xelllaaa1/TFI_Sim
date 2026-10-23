@@ -6,23 +6,13 @@ public class Bus
 
     public Bus()
     {
-        int service = Menu.random.nextInt(0,8);
-        people_on_board = Menu.random.nextInt(0, 96);
-
-        // Determine bus service and fullness.
-        if(service == 1) state = State.NIS;
-
-        else
-        {
-            if(people_on_board < 40) state = State.NFULL;
-            else state = State.FULL;
-        }
+        resetBus();
     }
 
     public void resetBus()
     {
-        int service = Menu.random.nextInt(0,8);
-        people_on_board = Menu.random.nextInt(0, 96);
+        int service = Utility.random.nextInt(0,8);
+        people_on_board = Utility.random.nextInt(0, 96);
 
         // Determine bus service and fullness.
         if(service == 1)
@@ -31,11 +21,12 @@ public class Bus
             people_on_board = 0;
         }
 
-        else
+        else if(people_on_board < 90)
         {
-            if(people_on_board < 30 || people_on_board > 60) state = State.NFULL;
-            else state = State.FULL;
+            state = State.NFULL;
         }
+
+        else state = State.FULL;
     }
 
     public void printBusInfo()
@@ -44,14 +35,14 @@ public class Bus
         System.out.println("State: " + state + "\n");
     }
 
-    public void goodOrBadBus()
+    public void waitForBus()
     {
         Bus.State bus_state = getState();
 
         // Handle bus state
         if(bus_state == Bus.State.NFULL)
         {
-            System.out.println("This bus is ok.");
+            System.out.println("The bus is here, finally!");
             return;
         }
 

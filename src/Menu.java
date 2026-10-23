@@ -1,11 +1,5 @@
-import java.util.*;
-
 public class Menu
 {
-    // Create objects for future use.
-    static Scanner scanner = new Scanner(System.in);
-    static Random random = new Random();
-
     public Person initialiseUser()
     {
         String name, surname;
@@ -13,82 +7,106 @@ public class Menu
 
         // Request data
         System.out.print("Enter your name: ");
-        name = scanner.nextLine();
+        name = Utility.scanner.nextLine();
     
         System.out.print("Enter your surname: ");
-        surname = scanner.nextLine();
+        surname = Utility.scanner.nextLine();
 
         System.out.print("Enter your age: ");
-        age = scanner.nextInt();
+        age = Utility.scanner.nextInt();
 
-        scanner.nextLine();
+        Utility.scanner.nextLine();
 
         System.out.printf("\nWelcome to Dublin, %s, your new Leap card has been activated, good luck!", name);
-        return new Person(name, surname, null, null, null, age);
+        return new Person(name, surname, age);
     }
 
-    public void catchBus(Person user, LeapCard leap)
+    public void askTripDetails(Person user)
     {
+        LeapCard leap = user.getLeapCard();
+
         System.out.print("What bus are we thinking?: ");
-        leap.setRoute(scanner.nextLine());
-        
-        // Get all the information needed.
-        ArrayList<String> bus_stops = leap.getStopsNames("resources/routes.txt", leap.getRoute());
+        leap.setRoute(Utility.scanner.nextLine());
         
         System.out.print("Where exactly are we?... : ");
-        leap.setStart(scanner.nextLine());
+        leap.setStart(Utility.scanner.nextLine());
 
         System.out.print("Where are we going?: ");
-        leap.setDestination(scanner.nextLine());
-
-        // Create a bus coming from nowhere.
-        Bus bus = new Bus();
-        bus.goodOrBadBus();
-        
-        leap.spendBalance(leap.calculateFare(bus_stops, leap));
-        System.out.println("Total time spent: " + leap.calculateTime(leap.countStopsTillDestination(bus_stops, leap.getStart(), leap.getDestination())));
+        leap.setDestination(Utility.scanner.nextLine());
     }
 
-    public void menu(Person user, LeapCard leap)
+    public void invalidTripHandler(LeapCard.Validation validity)
     {
-        boolean in_use = true;
-
-        // Greet the user and print their details.
-        System.out.println("\n\nYou are standing alone on a feels-like almost desolate Dublin Bus stop on the edge of the city...");
-        leap.printDetails();
-
-        while(in_use)
+        switch(validity)
         {
-            catchBus(user, leap);
-            leap.printDetails();
+            case VALID ->
+            {
+                // TODO: Do something about this. Valid is already handled in the caller method.
+            }
 
-            System.out.print("Anywhere else you wanna go?: (Say 'yes' to proceed, 'no' to stay here.): ");
-            String answer = scanner.nextLine();
+            case BAD_ROUTE ->
+            {
+                System.out.println("\nRoute you entered does not exist!\n");
+            }
 
-            if(!answer.equalsIgnoreCase("yes")) in_use = false;
+            case BAD_START ->
+            {
+                System.out.println("\nStart stop you entered does not exist!\n");
+            }
+
+            case BAD_DESTINATION ->
+            {
+                System.out.println("\nDestination stop you entered does not exist!\n");
+            }
+
+            case BACKWARD_DIRECTION ->
+            {
+                System.out.println("\nYou cannot travel in backward direction (for now)!\n");
+            }
+
+            case ZERO_STOPS ->
+            {
+                System.out.println("\nYou cannot travel zero stops!\n");
+            }
         }
     }
 
-    public static void main(String[] args)
+    public boolean continueTravel(String input)
     {
-        Menu main_menu = new Menu();
-        
-        Person user = main_menu.initialiseUser();
+        if(input.equalsIgnoreCase("yes")) return true;
+        else return false;
+    }
 
-        main_menu.menu(user, user.getLeapCard());
-        // Initialising details
-        /* ArrayList<String>stops = user.getLeapCard().getStopsNames("resources/routes.txt", t_route);
-        double fare = user.getLeapCard().calculateFare(stops, user);
-        double time = user.getLeapCard().calculateTime(user.getLeapCard().countStopsTillDestination(stops, t_start, t_destination));
-        
-        user.getLeapCard().printDetails();
-        System.out.println("It will take " + time + " minutes to go from " + t_start + " to " + t_destination + ".");
-        System.out.println("\nYou will be charged for " + fare + " euro.");
-        
-        // Catching a bus
-        System.out.println("\n\n\nStops: " + stops);
-        user.getLeapCard().printStopsEnRoute(stops, stops.indexOf(t_start), stops.indexOf(t_destination)); */
-        
-        scanner.close();
+    public void menu(Person user)
+    {
+        boolean in_use = true;
+        LeapCard leap = user.getLeapCard();
+
+        // Greet the user and print their details.
+        System.out.println("\n\nYou are standing alone on a feels-like almost desolate Dublin Bus stop on the edge of the city...");
+        leap.printLeapCardDetails();
+
+        while(in_use)
+        {
+            askTripDetails(user);
+            LeapCard.Validation validity = leap.validateTrip();
+
+            if(validity == LeapCard.Validation.VALID)
+            {
+                Bus bus = new Bus();
+                double time_spent = user.travel(bus);
+
+                System.out.println("\nFare:" + leap.getTripFare());
+                System.out.println("Current balance: " + leap.getBalance());
+                System.out.println("Time spent: " + time_spent);
+            }
+            else
+            {
+                invalidTripHandler(validity);
+            }
+
+            System.out.print("Start a new trip?: (Say 'yes' to proceed, 'no' to stay here.): ");
+            if(!(continueTravel(Utility.scanner.nextLine()))) in_use = false;
+        }
     }
 }
