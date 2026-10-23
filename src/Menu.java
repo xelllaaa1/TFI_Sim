@@ -96,7 +96,7 @@ public class Menu
                 Bus bus = new Bus();
                 double time_spent = user.travel(bus);
 
-                System.out.println("\nFare:" + leap.getTripFare());
+                System.out.println("\nFare: " + leap.getTripFare());
                 System.out.println("Current balance: " + leap.getBalance());
                 System.out.println("Time spent: " + time_spent);
             }
