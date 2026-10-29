@@ -9,6 +9,11 @@ public class Bus
         resetBus();
     }
 
+    public State getState()
+    {
+        return state;
+    }
+
     public void resetBus()
     {
         int service = Utility.random.nextInt(0,8);
@@ -29,12 +34,6 @@ public class Bus
         else state = State.FULL;
     }
 
-    public void printBusInfo()
-    {
-        System.out.println("\nPeople on board: " + people_on_board);
-        System.out.println("State: " + state + "\n");
-    }
-
     public void waitForBus()
     {
         Bus.State bus_state = getState();
@@ -48,7 +47,6 @@ public class Bus
 
         while(bus_state != Bus.State.NFULL)
         {
-            printBusInfo();
             bus_state = getState();
 
             if(bus_state == State.FULL)
@@ -72,10 +70,5 @@ public class Bus
         }
 
         return;
-    }
-
-    public State getState()
-    {
-        return state;
     }
 }

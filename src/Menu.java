@@ -41,7 +41,7 @@ public class Menu
         {
             case VALID ->
             {
-                // TODO: Do something about this. Valid is already handled in the caller method.
+                System.out.println("\nTrip details confirmed. Off we go!");
             }
 
             case BAD_ROUTE ->
@@ -73,8 +73,14 @@ public class Menu
 
     public boolean continueTravel(String input)
     {
-        if(input.equalsIgnoreCase("yes")) return true;
-        else return false;
+        if(input.equalsIgnoreCase("yes"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void menu(Person user)
@@ -106,7 +112,10 @@ public class Menu
             }
 
             System.out.print("Start a new trip?: (Say 'yes' to proceed, 'no' to stay here.): ");
-            if(!(continueTravel(Utility.scanner.nextLine().strip()))) in_use = false;
+            if(!(continueTravel(Utility.scanner.nextLine().strip())))
+            {
+                in_use = false;
+            }
         }
     }
 }

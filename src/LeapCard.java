@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.time.LocalTime;
-import java.io.*;
 
 public class LeapCard
 {
@@ -119,11 +117,6 @@ public class LeapCard
         System.out.println("Card Number: " + cardNumber + "\n");
     }
 
-    public void printStopsEnRoute(ArrayList<String> stops, int start, int destination)
-    {
-        for(int i = start; i <= destination; i++) System.out.println("Bus Stop #" + (i + 1) + ": " + stops.get(i));
-    }
-
     public void addBalance(double amount)
     {
         if(amount > 0)
@@ -156,49 +149,6 @@ public class LeapCard
         }
     }
 
-    public ArrayList<String> getStopsNames(String path)
-    {
-        try(BufferedReader reader = new BufferedReader(new FileReader(path)))
-        {
-            String currRoute;
-            int start = 0;
-            
-            while((currRoute = reader.readLine()) != null)
-            {
-                start = currRoute.indexOf(':');
-
-                if(currRoute.substring(0, start).equals(route))
-                {
-                    break;
-                }
-            }
-
-            /* TODO: Do something about nulls since they can intervene with
-            the output of validateTrip() */
-            /* Well, routes.txt will be predefined for everyone, so I can
-            get away with saying that if this returns null because of an incorrect file
-            it is me to blame for putting in a wrong path. */
-            if(currRoute == null)
-            {
-                return null;
-            }
-
-            ArrayList<String> stops = new ArrayList<String>(Arrays.asList(currRoute.substring(start + 1).split(",")));
-
-            for(int i = 0; i < stops.size(); i++)
-            {
-                stops.set(i, stops.get(i).strip());
-            }
-
-            return stops;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public int countStopsTillDestination(ArrayList<Stop> stops, String start, String destination)
     {
         if(stops == null) return -1;
@@ -227,7 +177,6 @@ public class LeapCard
 
         // count = stops travelled
         int count = countStopsTillDestination(stops, start, destination);
-        System.out.println("DEBUG: Final count = " + count);
 
         // Handling different fare rates according to card type
         switch(type)
