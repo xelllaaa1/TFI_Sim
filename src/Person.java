@@ -41,7 +41,7 @@ public class Person
 
         if(getLeapCard().validateTrip() != LeapCard.Validation.VALID) return TRIP_FAILED;
 
-        ArrayList<String> stops = getLeapCard().getStopsNames("resources/routes.txt");
+        ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
         bus.waitForBus();
 
         double trip_fare = getLeapCard().calculateFare(stops);

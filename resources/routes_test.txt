@@ -1,0 +1,9 @@
+15: Ballycullen Road|100, Stocking Avenue|150, Connolly Station|250
+
+2 Eden Quay|250, Connolly Station|250
+3: Connolly Station250
+4: A|10, B|abc, C|10
+5: A|10, B|20, C
+6: A| 10, B|10
+7:,
+8: A|10, B|abc, C|xyz

@@ -7,10 +7,10 @@ public class Menu
 
         // Request data
         System.out.print("Enter your name: ");
-        name = Utility.scanner.nextLine();
+        name = Utility.scanner.nextLine().strip();
     
         System.out.print("Enter your surname: ");
-        surname = Utility.scanner.nextLine();
+        surname = Utility.scanner.nextLine().strip();
 
         System.out.print("Enter your age: ");
         age = Utility.scanner.nextInt();
@@ -26,13 +26,13 @@ public class Menu
         LeapCard leap = user.getLeapCard();
 
         System.out.print("What bus are we thinking?: ");
-        leap.setRoute(Utility.scanner.nextLine());
+        leap.setRoute(Utility.scanner.nextLine().strip().toUpperCase());
         
         System.out.print("Where exactly are we?... : ");
-        leap.setStart(Utility.scanner.nextLine());
+        leap.setStart(Utility.scanner.nextLine().strip());
 
         System.out.print("Where are we going?: ");
-        leap.setDestination(Utility.scanner.nextLine());
+        leap.setDestination(Utility.scanner.nextLine().strip());
     }
 
     public void invalidTripHandler(LeapCard.Validation validity)
@@ -106,7 +106,7 @@ public class Menu
             }
 
             System.out.print("Start a new trip?: (Say 'yes' to proceed, 'no' to stay here.): ");
-            if(!(continueTravel(Utility.scanner.nextLine()))) in_use = false;
+            if(!(continueTravel(Utility.scanner.nextLine().strip()))) in_use = false;
         }
     }
 }
