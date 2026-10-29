@@ -39,24 +39,20 @@ public class Person
     {
         final double TRIP_FAILED = -1.0;
 
-        if(getLeapCard().validateTrip() != LeapCard.Validation.VALID) return TRIP_FAILED;
+        if(leapCard.validateTrip() != LeapCard.Validation.VALID)
+        {
+            return TRIP_FAILED;
+        }
 
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
         bus.waitForBus();
 
-        double trip_fare = getLeapCard().calculateFare(stops);
+        double trip_fare = leapCard.calculateFare(stops);
 
-        getLeapCard().setTripFare(trip_fare);
+        leapCard.setTripFare(trip_fare);
 
-        getLeapCard().spendBalance(trip_fare);
+        leapCard.spendBalance(trip_fare);
 
-        return getLeapCard().calculateTime(getLeapCard().countStopsTillDestination(stops, getLeapCard().getStart(), getLeapCard().getDestination()));
-    }
-
-    public void printPersonDetails()
-    {
-        System.out.println("Name: " + name);
-        System.out.println("Surname: " + surname);
-        System.out.println("Age: " + age);
+        return leapCard.calculateTime(leapCard.countStopsTillDestination(stops, leapCard.getStart(), leapCard.getDestination()));
     }
 }
