@@ -199,20 +199,20 @@ public class LeapCard
         }
     }
 
-    public int countStopsTillDestination(ArrayList<String> stops, String start, String destination)
+    public int countStopsTillDestination(ArrayList<Stop> stops, String start, String destination)
     {
         if(stops == null) return -1;
         if(stops.isEmpty()) return -1;
 
-        int from = stops.indexOf(start);
-        int to = stops.indexOf(destination);
+        int from = Utility.getStopPosition(stops, start);
+        int to = Utility.getStopPosition(stops, destination);
 
         if(from == -1 || to == -1 || to < from) return -1;
 
         return to - from;
     }
 
-    public double calculateFare(ArrayList<String> stops)
+    public double calculateFare(ArrayList<Stop> stops)
     {
         String start = getStart();
         String destination = getDestination();
@@ -227,7 +227,6 @@ public class LeapCard
 
         // count = stops travelled
         int count = countStopsTillDestination(stops, start, destination);
-
         System.out.println("DEBUG: Final count = " + count);
 
         // Handling different fare rates according to card type
@@ -302,20 +301,21 @@ public class LeapCard
 
     public Validation validateTrip()
     {
-        ArrayList<String> stops = getStopsNames("resources/routes.txt");
+        ArrayList<Stop> stops = Utility.routes.get(route);
 
         if(stops == null)
             return Validation.BAD_ROUTE;
 
-        else if(!stops.contains(start))
+        else if(Utility.getStopPosition(stops, start) == -1)
             return Validation.BAD_START;
 
-        else if(!stops.contains(destination))
+        else if(Utility.getStopPosition(stops, destination) == -1)
             return Validation.BAD_DESTINATION;
 
-        int distance = countStopsTillDestination(stops, start, destination);
-        if(distance == -1) return Validation.BACKWARD_DIRECTION;
-        else if(distance == 0) return Validation.ZERO_STOPS;
+        int stopCount = countStopsTillDestination(stops, start, destination);
+
+        if(stopCount == -1) return Validation.BACKWARD_DIRECTION;
+        else if(stopCount == 0) return Validation.ZERO_STOPS;
 
         return Validation.VALID;
     }
