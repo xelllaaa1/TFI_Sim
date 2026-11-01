@@ -1,2 +1,2 @@
 15: Ballycullen Road|100, Stocking Avenue|150, Hunters Crescent|100, Scholarstown Road|200, Templeogue Bridge|150, Templeogue Post Office|100, Terenure Cross|150, Rathgar Road|200, Rathmines Road|100, Camden Street|50, South Great George's Street|100, Dame Street|100, Eden Quay|250, Connolly Station|250
-TEST: 1|10, 2|10, 3|10, 4|10, 5|10, 6|10, 7|10, 8|10, 9|10, 10|10
+TST: 001|10, 002|10, 003|10, 004|10, 005|10, 006|10, 007|10, 008|10, 009|10, 010|10

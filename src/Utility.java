@@ -109,4 +109,17 @@ public class Utility
         }
         return -1;
     }
+
+    public static boolean isWholeNumber(String s)
+    {
+        try
+        {
+            Integer.parseInt(s);
+            return true;
+        }
+        catch(NumberFormatException ex)
+        {
+            return false;
+        }
+    }
 }

@@ -1,23 +1,25 @@
+import java.util.function.Predicate;
+
 public class Menu
 {
+    private static Predicate<String> notBlank = s -> !s.isBlank();
+    private static Predicate<String> lengthBounds = s -> s.length() >= 2 && s.length() <= 20;
+    private static Predicate<String> validSymbols = s -> s.matches("[\\p{L}' -]+");
+    private static Predicate<String> validAge = s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) <= 99) && (Integer.parseInt(s) >= 5);
+    private static Predicate<String> validRoute = s -> s.matches("[A-Za-z0-9]+") && (s.length() <= 3);
+    private static Predicate<String> validStop = s -> s.matches("[A-Za-z0-9 '.-]+") && (s.length() >= 3) && (s.length() <= 30);
+
     public Person initialiseUser()
     {
         String name, surname;
         int age;
 
         // Request data
-        System.out.print("Enter your name: ");
-        name = Utility.scanner.nextLine().strip();
-    
-        System.out.print("Enter your surname: ");
-        surname = Utility.scanner.nextLine().strip();
+        name = askUntilValid("Enter your name: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Name must be 2-20 characters: letters, spaces, hyphens or apostrophes only");  
+        surname = askUntilValid("Enter your surname: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Surname must be 2-20 characters: letters, spaces, hyphens or apostrophes only");
+        age = Integer.parseInt(askUntilValid("Enter your age: ", validAge, "[Error] Age must be a number between 5 and 99"));
 
-        System.out.print("Enter your age: ");
-        age = Utility.scanner.nextInt();
-
-        Utility.scanner.nextLine();
-
-        System.out.printf("\nWelcome to Dublin, %s, your new Leap card has been activated, good luck!", name);
+        System.out.printf("\nWelcome to Dublin, %s!\nYour Leap card has been successfully activated.\n", name);
         return new Person(name, surname, age);
     }
 
@@ -25,14 +27,11 @@ public class Menu
     {
         LeapCard leap = user.getLeapCard();
 
-        System.out.print("What bus are we thinking?: ");
-        leap.setRoute(Utility.scanner.nextLine().strip().toUpperCase());
+        leap.setRoute(askUntilValid("Enter route: ", validRoute, "[Error] Route ID must be 1-3 characters: A-Z letters, digits 0-9").strip().toUpperCase());
         
-        System.out.print("Where exactly are we?... : ");
-        leap.setStart(Utility.scanner.nextLine().strip());
+        leap.setStart(askUntilValid("Enter starting stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops").strip());
 
-        System.out.print("Where are we going?: ");
-        leap.setDestination(Utility.scanner.nextLine().strip());
+        leap.setDestination(askUntilValid("Enter destination stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops").strip());
     }
 
     public void invalidTripHandler(LeapCard.Validation validity)
@@ -71,16 +70,50 @@ public class Menu
         }
     }
 
-    public boolean continueTravel(String input)
+    public boolean continueTravel()
     {
-        if(input.equalsIgnoreCase("yes"))
+        System.out.println("\nOne more trip?");
+        System.out.println("1. Yes\n2. No");
+        int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 2), "[Error] Choice must be 1 (\"Yes\") or 2(\"No\")"));
+
+        switch(choice)
         {
-            return true;
+            case 1 ->
+            {
+                return true;
+            }
+            
+            case 2 ->
+            {
+                return false;
+            }
+
+            default ->
+            {
+                return false;
+            }
         }
-        else
+    }
+
+    public String askUntilValid(String prompt, Predicate<String> isValid, String errorMessage)
+    {
+        String input;
+        boolean isGood;
+        
+        do
         {
-            return false;
+            System.out.print(prompt);
+            input = Utility.scanner.nextLine().strip();
+            isGood = isValid.test(input);
+
+            if(!isGood)
+            {
+                System.out.println(errorMessage + "\n");
+            }
         }
+        while(!isGood);
+
+        return input;
     }
 
     public void menu(Person user)
@@ -111,8 +144,7 @@ public class Menu
                 invalidTripHandler(validity);
             }
 
-            System.out.print("Start a new trip?: (Say 'yes' to proceed, 'no' to stay here.): ");
-            if(!(continueTravel(Utility.scanner.nextLine().strip())))
+            if(!continueTravel())
             {
                 in_use = false;
             }

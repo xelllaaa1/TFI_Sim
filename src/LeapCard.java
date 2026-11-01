@@ -169,7 +169,6 @@ public class LeapCard
         String type = getType();
 
         if(start.equals(destination)) return 0.0;
-        /* DEBUG System.out.println("\n\n\nStops count > 0\n"); */
 
         // Variables for fare calculation
         final int short_trip = 5, medium_trip = 20, long_trip = 45;
@@ -205,7 +204,6 @@ public class LeapCard
             default -> {return 2.5;}
         }
 
-        /*Debug System.out.println("DEBUG: Fare = " + fare); */
         return fare;
     }
 
