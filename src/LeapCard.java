@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.*;
+import java.lang.Math;
 import java.time.LocalTime;
 
 public class LeapCard
@@ -11,12 +12,8 @@ public class LeapCard
 
     private String start, destination, route;
     private double trip_fare;
-
-    enum Traffic {HEAVY, MODERATE, LIGHT, NONE}
-    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, BACKWARD_DIRECTION, ZERO_STOPS, VALID}
-
-    Traffic traffic;
-
+    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS, VALID}
+    
     private ArrayList<String> history = new ArrayList<String>();
 
     public LeapCard(Person owner)
@@ -53,16 +50,6 @@ public class LeapCard
         return history;
     }
 
-    public int getTime()
-    {
-        return current_time;
-    }
-
-    public Traffic getTraffic()
-    {
-        return traffic;
-    }
-
     public String getStart()
     {
         return start;
@@ -81,11 +68,6 @@ public class LeapCard
     public double getTripFare()
     {
         return trip_fare;
-    }
-
-    public void setType(String type)
-    {
-        this.type = type;
     }
 
     public void setStart(String start)
@@ -149,101 +131,128 @@ public class LeapCard
         }
     }
 
-    public int countStopsTillDestination(ArrayList<Stop> stops, String start, String destination)
+    public int calculateDistance(ArrayList<Stop> stops, String start, String destination)
     {
-        if(stops == null) return -1;
-        if(stops.isEmpty()) return -1;
+        if(stops == null) 
+        {
+            System.err.print("[Error] Stops are null\n");
+            return -1;
+        }
+        else if(stops.isEmpty())
+        {
+            System.err.print("[Error] Route stop list is empty\n");
+            return -1;
+        }
+        
+        int distance = 0;
+        
+        int start_pos = Utility.getStopPosition(stops, start);
+        if(start_pos == -1)
+        {
+            System.err.printf("[Error] Stop %s not found\n", start);
+            return -1;
+        }
 
-        int from = Utility.getStopPosition(stops, start);
-        int to = Utility.getStopPosition(stops, destination);
+        int destination_pos = Utility.getStopPosition(stops, destination);
+        if(destination_pos == -1)
+        {
+            System.err.printf("[Error] Stop %s not found\n", destination);
+            return -1;
+        }
 
-        if(from == -1 || to == -1 || to < from) return -1;
-
-        return to - from;
+        for(int i = Math.min(start_pos, destination_pos); i < Math.max(start_pos, destination_pos); i++)
+        {
+            distance += stops.get(i).getDistanceToNext();
+        }
+        return distance;
     }
 
     public double calculateFare(ArrayList<Stop> stops)
     {
-        String start = getStart();
-        String destination = getDestination();
         String type = getType();
 
-        if(start.equals(destination)) return 0.0;
-
         // Variables for fare calculation
-        final int short_trip = 5, medium_trip = 20, long_trip = 45;
-        double fare = 0.0;
+        double fare, rate = 0.0;
 
-        // count = stops travelled
-        int count = countStopsTillDestination(stops, start, destination);
+        int distance = calculateDistance(stops, start, destination);
 
         // Handling different fare rates according to card type
         switch(type)
         {
-            case "Adult" -> {
-                if(count <= short_trip) fare = 1.0;
-                else if(count <= medium_trip) fare = 1.5;
-                else if(count <= long_trip) fare = 2.5;
-                else fare = 4.15;
+            case "Adult" ->
+            {
+                rate = 0.35;
             }
 
-            case "Young Adult / Student" -> {
-                if(count <= short_trip) fare = 0.75;
-                else if(count <= medium_trip) fare = 1.0;
-                else if(count <= long_trip) fare = 1.7;
-                else fare = 3.0;
+            case "Child" ->
+            {
+                rate = 0.10;
             }
 
-            case "Child" -> {
-                if(count <= short_trip) fare = 0.5;
-                else if(count <= medium_trip) fare = 0.8;
-                else if(count <= long_trip) fare = 1.5;
-                else fare = 2.3;
+            case "Young Adult / Student" ->
+            {
+                rate = 0.17;
             }
-
-            default -> {return 2.5;}
         }
+
+        fare = ((double) distance / 1000) * rate;
+        fare = Utility.roundToTwoPlaces(fare);
 
         return fare;
     }
 
-    public double calculateTime(int stop_count)
+    public double calculateTime(int distance)
     {
-        int hour = getTime();
-        double time_per_stop = 1.0;
+        enum Traffic {HEAVY, MODERATE, LIGHT, NONE};
+        Traffic traffic = Traffic.NONE;
+        int hour = current_time;
+        double time_per_km = 0.0, time_spent = 0.0; // in minutes
 
         if(hour >= 0 && hour <= 7)
-            this.traffic = Traffic.NONE;
-        else if((hour >= 7 && hour <= 10) || (hour >= 16 && hour <= 19))
-            this.traffic = Traffic.HEAVY;
-        else if((hour >= 10 && hour <= 11) || (hour >= 14 && hour <= 16) || (hour >= 19 && hour <= 21))
-            this.traffic = Traffic.MODERATE;
-        else if((hour >= 11 && hour <= 14) || (hour >= 21 && hour <= 23)) this.traffic = Traffic.LIGHT;
+        {
+            traffic = Traffic.NONE;
+        }
 
-        switch(this.getTraffic())
+        else if((hour >= 10 && hour <= 14) || (hour >= 20 && hour <= 23))
+        {
+            traffic = Traffic.LIGHT;
+        }
+
+        else if((hour >= 18 && hour <= 19))
+        {
+            traffic = Traffic.MODERATE;
+        }
+
+        else if((hour >= 8 && hour <= 9) || (hour >= 15 && hour <= 17))
+        {
+            traffic = Traffic.HEAVY;
+        }
+
+        switch(traffic)
         {
             case NONE ->
             {
-                time_per_stop = 0.25;
+                time_per_km = 5.0;
             }
 
             case LIGHT ->
             {
-                time_per_stop = 0.5;
+                time_per_km = 6.5;
             }
 
             case MODERATE ->
             {
-                time_per_stop = 1.25;
+                time_per_km = 8.5;
             }
 
             case HEAVY ->
             {
-                time_per_stop = 2.5;
+                time_per_km = 12.0;
             }
         }
 
-        return time_per_stop * stop_count;
+        time_spent = Utility.roundToTwoPlaces((double) distance / 1000) * time_per_km;
+        return time_spent;
     }
 
     public Validation validateTrip()
@@ -259,10 +268,8 @@ public class LeapCard
         else if(Utility.getStopPosition(stops, destination) == -1)
             return Validation.BAD_DESTINATION;
 
-        int stopCount = countStopsTillDestination(stops, start, destination);
-
-        if(stopCount == -1) return Validation.BACKWARD_DIRECTION;
-        else if(stopCount == 0) return Validation.ZERO_STOPS;
+        int distance = calculateDistance(stops, start, destination);
+        if(distance == 0) return Validation.ZERO_STOPS;
 
         return Validation.VALID;
     }

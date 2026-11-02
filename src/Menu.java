@@ -27,11 +27,11 @@ public class Menu
     {
         LeapCard leap = user.getLeapCard();
 
-        leap.setRoute(askUntilValid("Enter route: ", validRoute, "[Error] Route ID must be 1-3 characters: A-Z letters, digits 0-9").strip().toUpperCase());
+        leap.setRoute(askUntilValid("Enter route: ", validRoute, "[Error] Route ID must be 1-3 characters: A-Z letters, digits 0-9").toUpperCase());
         
-        leap.setStart(askUntilValid("Enter starting stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops").strip());
+        leap.setStart(askUntilValid("Enter starting stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops"));
 
-        leap.setDestination(askUntilValid("Enter destination stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops").strip());
+        leap.setDestination(askUntilValid("Enter destination stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops"));
     }
 
     public void invalidTripHandler(LeapCard.Validation validity)
@@ -56,11 +56,6 @@ public class Menu
             case BAD_DESTINATION ->
             {
                 System.out.println("\nDestination stop you entered does not exist!\n");
-            }
-
-            case BACKWARD_DIRECTION ->
-            {
-                System.out.println("\nYou cannot travel in backward direction (for now)!\n");
             }
 
             case ZERO_STOPS ->

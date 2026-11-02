@@ -122,4 +122,13 @@ public class Utility
             return false;
         }
     }
+
+    public static double roundToTwoPlaces(double n)
+    {
+        n *= 100;
+        n = (double) Math.round(n);
+        n /= 100;
+
+        return n;
+    }
 }

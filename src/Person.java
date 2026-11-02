@@ -53,6 +53,6 @@ public class Person
 
         leapCard.spendBalance(trip_fare);
 
-        return leapCard.calculateTime(leapCard.countStopsTillDestination(stops, leapCard.getStart(), leapCard.getDestination()));
+        return leapCard.calculateTime(leapCard.calculateDistance(stops, leapCard.getStart(), leapCard.getDestination()));
     }
 }
