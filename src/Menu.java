@@ -27,7 +27,7 @@ public class Menu
     {
         LeapCard leap = user.getLeapCard();
 
-        leap.setRoute(askUntilValid("Enter route: ", validRoute, "[Error] Route ID must be 1-3 characters: A-Z letters, digits 0-9").toUpperCase());
+        leap.setRoute(askUntilValid("\nEnter route: ", validRoute, "[Error] Route ID must be 1-3 characters: A-Z letters, digits 0-9").toUpperCase());
         
         leap.setStart(askUntilValid("Enter starting stop: ", validStop, "[Error] Stop name must be 3-30 characters: A-Z letters, digits 0-9, apostrophes, spaces, hyphens, full stops"));
 
@@ -132,7 +132,8 @@ public class Menu
 
                 System.out.println("\nFare: " + leap.getTripFare());
                 System.out.println("Current balance: " + leap.getBalance());
-                System.out.println("Time spent: " + time_spent);
+                System.out.println("Distance travelled: " + ((double) leap.getTripDistance() / 1000) + " km");
+                System.out.println("Time spent: ~ " + time_spent + " minutes");
             }
             else
             {

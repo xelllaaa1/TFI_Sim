@@ -12,6 +12,7 @@ public class LeapCard
 
     private String start, destination, route;
     private double trip_fare;
+    private int trip_distance;
     enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS, VALID}
     
     private ArrayList<String> history = new ArrayList<String>();
@@ -70,6 +71,10 @@ public class LeapCard
         return trip_fare;
     }
 
+    public int getTripDistance()
+    {
+        return trip_distance;
+    }
     public void setStart(String start)
     {
         this.start = start;
@@ -88,6 +93,11 @@ public class LeapCard
     public void setTripFare(double trip_fare)
     {
         this.trip_fare = trip_fare;
+    }
+
+    public void setTripDistance(int trip_distance)
+    {
+        this.trip_distance = trip_distance;
     }
 
     // Useful functions
@@ -201,12 +211,13 @@ public class LeapCard
         return fare;
     }
 
-    public double calculateTime(int distance)
+    public int calculateTime(int distance)
     {
         enum Traffic {HEAVY, MODERATE, LIGHT, NONE};
         Traffic traffic = Traffic.NONE;
         int hour = current_time;
-        double time_per_km = 0.0, time_spent = 0.0; // in minutes
+        double time_per_km = 0.0;
+        int time_spent = 0; // in minutes
 
         if(hour >= 0 && hour <= 7)
         {
@@ -232,7 +243,7 @@ public class LeapCard
         {
             case NONE ->
             {
-                time_per_km = 5.0;
+                time_per_km = 5;
             }
 
             case LIGHT ->
@@ -247,11 +258,11 @@ public class LeapCard
 
             case HEAVY ->
             {
-                time_per_km = 12.0;
+                time_per_km = 12;
             }
         }
 
-        time_spent = Utility.roundToTwoPlaces((double) distance / 1000) * time_per_km;
+        time_spent = (int) Math.round(((double) distance / 1000) * time_per_km);
         return time_spent;
     }
 

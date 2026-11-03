@@ -48,11 +48,12 @@ public class Person
         bus.waitForBus();
 
         double trip_fare = leapCard.calculateFare(stops);
+        int trip_distance = leapCard.calculateDistance(stops, leapCard.getStart(), leapCard.getDestination());
 
         leapCard.setTripFare(trip_fare);
-
+        leapCard.setTripDistance(trip_distance);
         leapCard.spendBalance(trip_fare);
 
-        return leapCard.calculateTime(leapCard.calculateDistance(stops, leapCard.getStart(), leapCard.getDestination()));
+        return leapCard.calculateTime(trip_distance);
     }
 }
