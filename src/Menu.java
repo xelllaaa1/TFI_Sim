@@ -64,11 +64,6 @@ public class Menu
             {
                 System.err.println("\n[Error] You cannot travel zero stops!\n");
             }
-
-            case NOT_ENOUGH_MONEY ->
-            {
-                System.err.println("[Error] Trip cancelled: not enough balance");
-            }
         }
     }
 
@@ -121,47 +116,55 @@ public class Menu
 
     public void menu(Person user)
     {
-        boolean in_use = true;
+        boolean inUse = true;
         LeapCard leap = user.getLeapCard();
 
         // Greet the user and print their details.
         System.out.println("\n\nYou are standing alone on a feels-like almost desolate Dublin Bus stop on the edge of the city...");
         leap.printLeapCardDetails();
 
-        while(in_use)
+        while(inUse)
         {
             askTripDetails(user);
             LeapCard.Validation validity = leap.validateTrip();
 
-            while(validity == LeapCard.Validation.NOT_ENOUGH_MONEY)
+            if(validity != LeapCard.Validation.VALID)
             {
-                if(!askYesNo("Your balance is too low for this trip. Would you like to top-up?"))
-                {
-                    break;
-                }
-
-                topUp(leap);
-                validity = leap.validateTrip();
-            }
-
-            if(validity == LeapCard.Validation.VALID)
-            {
-                Bus bus = new Bus();
-                double time_spent = user.travel(bus);
-
-                System.out.println("\nFare: " + leap.getTripFare());
-                System.out.println("Current balance: " + leap.getBalance());
-                System.out.println("Distance travelled: " + ((double) leap.getTripDistance() / 1000) + " km");
-                System.out.println("Time spent: ~ " + (int)time_spent + " minutes");
+                invalidTripHandler(validity);
             }
             else
             {
-                invalidTripHandler(validity);
+                Bus bus = new Bus();
+                bus.waitForBus();
+
+                while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))
+                {
+                    if(!askYesNo("Your balance is too low for this trip. Would you like to top-up?"))
+                    {
+                        break;
+                    }
+
+                    topUp(leap);
+                }
+
+                if(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute())))
+                {
+                    double time_spent = user.travel();
+
+                    System.out.println("\nFare: " + leap.getTripFare());
+                    System.out.println("Current balance: " + leap.getBalance());
+                    System.out.println("Distance travelled: " + ((double) leap.getTripDistance() / 1000) + " km");
+                    System.out.println("Time spent: ~ " + (int)time_spent + " minutes");
+                }
+                else
+                {
+                    System.err.println("[Error] Insufficient balance, top up your card's balance");
+                }
             }
 
             if(!askYesNo("One more trip?"))
             {
-                in_use = false;
+                inUse = false;
             }
         }
     }

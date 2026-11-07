@@ -13,7 +13,7 @@ public class LeapCard
     private String start, destination, route;
     private double trip_fare;
     private int trip_distance;
-    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS, NOT_ENOUGH_MONEY, VALID}
+    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS,  VALID}
     
     private ArrayList<String> history = new ArrayList<String>();
 
@@ -292,11 +292,11 @@ public class LeapCard
             return Validation.ZERO_STOPS;
         }
 
-        else if(Utility.roundToTwoPlaces(balance - calculateFare(stops)) < 0)
-        {
-            return Validation.NOT_ENOUGH_MONEY;
-        }
-
         return Validation.VALID;
+    }
+
+    public boolean enoughMoneyForTrip(ArrayList<Stop> stops)
+    {
+        return Utility.roundToTwoPlaces(balance - calculateFare(stops)) >= 0;
     }
 }

@@ -35,10 +35,9 @@ public class Person
         return leapCard;
     }
 
-    public double travel(Bus bus)
+    public double travel()
     {
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
-        bus.waitForBus();
 
         double trip_fare = leapCard.calculateFare(stops);
         int trip_distance = leapCard.calculateDistance(stops, leapCard.getStart(), leapCard.getDestination());
