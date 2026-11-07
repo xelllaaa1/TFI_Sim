@@ -37,13 +37,6 @@ public class Person
 
     public double travel(Bus bus)
     {
-        final double TRIP_FAILED = -1.0;
-
-        if(leapCard.validateTrip() != LeapCard.Validation.VALID)
-        {
-            return TRIP_FAILED;
-        }
-
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
         bus.waitForBus();
 

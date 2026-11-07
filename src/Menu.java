@@ -9,6 +9,7 @@ public class Menu
     private static Predicate<String> validAge = s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) <= 99) && (Integer.parseInt(s) >= 5);
     private static Predicate<String> validRoute = s -> s.matches("[A-Za-z0-9]+") && (s.length() <= 3);
     private static Predicate<String> validStop = s -> s.matches("[A-Za-z0-9 '.-]+") && (s.length() >= 3) && (s.length() <= 30);
+    private static Predicate<String> validTopUp = s -> s.matches("\\d+(\\.[\\d]{1,2})?") && Double.parseDouble(s) >= 5 && Double.parseDouble(s) <= 100;
 
     public Person initialiseUser()
     {
@@ -46,49 +47,38 @@ public class Menu
 
             case BAD_ROUTE ->
             {
-                System.out.println("\nRoute you entered does not exist!\n");
+                System.err.println("\n[Error] Route you entered does not exist!\n");
             }
 
             case BAD_START ->
             {
-                System.out.println("\nStart stop you entered does not exist!\n");
+                System.err.println("\n[Error] Start stop you entered does not exist!\n");
             }
 
             case BAD_DESTINATION ->
             {
-                System.out.println("\nDestination stop you entered does not exist!\n");
+                System.err.println("\n[Error] Destination stop you entered does not exist!\n");
             }
 
             case ZERO_STOPS ->
             {
-                System.out.println("\nYou cannot travel zero stops!\n");
+                System.err.println("\n[Error] You cannot travel zero stops!\n");
+            }
+
+            case NOT_ENOUGH_MONEY ->
+            {
+                System.err.println("[Error] Trip cancelled: not enough balance");
             }
         }
     }
 
-    public boolean continueTravel()
+    public boolean askYesNo(String prompt)
     {
-        System.out.println("\nOne more trip?");
+        System.out.printf("\n%s\n", prompt);
         System.out.println("1. Yes\n2. No");
-        int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 2), "[Error] Choice must be 1 (\"Yes\") or 2(\"No\")"));
+        int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 2), "[Error] Choice must be 1 (\"Yes\") or 2 (\"No\")"));
 
-        switch(choice)
-        {
-            case 1 ->
-            {
-                return true;
-            }
-            
-            case 2 ->
-            {
-                return false;
-            }
-
-            default ->
-            {
-                return false;
-            }
-        }
+       return choice == 1;
     }
 
     public String askUntilValid(String prompt, Predicate<String> isValid, String errorMessage)
@@ -122,6 +112,13 @@ public class Menu
         return input;
     }
 
+    public void topUp(LeapCard leap)
+    {
+        double amount = Double.parseDouble(askUntilValid("Enter amount: ", validTopUp, "[Error] Amount must be at least 5 and at most 100 with up to 2 decimals"));
+        leap.addBalance(amount);
+        System.out.printf("Topped-up with %.2f!\nNew balance: %.2f\n", amount, leap.getBalance());
+    }
+
     public void menu(Person user)
     {
         boolean in_use = true;
@@ -135,6 +132,17 @@ public class Menu
         {
             askTripDetails(user);
             LeapCard.Validation validity = leap.validateTrip();
+
+            while(validity == LeapCard.Validation.NOT_ENOUGH_MONEY)
+            {
+                if(!askYesNo("Your balance is too low for this trip. Would you like to top-up?"))
+                {
+                    break;
+                }
+
+                topUp(leap);
+                validity = leap.validateTrip();
+            }
 
             if(validity == LeapCard.Validation.VALID)
             {
@@ -151,7 +159,7 @@ public class Menu
                 invalidTripHandler(validity);
             }
 
-            if(!continueTravel())
+            if(!askYesNo("One more trip?"))
             {
                 in_use = false;
             }

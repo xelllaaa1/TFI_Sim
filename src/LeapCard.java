@@ -13,7 +13,7 @@ public class LeapCard
     private String start, destination, route;
     private double trip_fare;
     private int trip_distance;
-    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS, VALID}
+    enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS, NOT_ENOUGH_MONEY, VALID}
     
     private ArrayList<String> history = new ArrayList<String>();
 
@@ -112,23 +112,24 @@ public class LeapCard
     public void addBalance(double amount)
     {
         if(amount > 0)
-            balance += amount;
-
+        {
+            balance = Utility.roundToTwoPlaces(balance + amount);
+        }
         else
         {
-            System.out.println("Amount has to be positive.");
-            balance += 0;
+            System.err.println("[Error] Amount has to be positive!");
         }
     }
 
     public void spendBalance(double amount)
     {
         if(amount > 0)
-            balance -= amount;
-
+        {
+            balance = Utility.roundToTwoPlaces(balance - amount);
+        }
         else
         {
-            System.out.println("Amount has to be positive.");
+            System.err.println("[Error] Amount has to be positive!");
         }
     }
 
@@ -271,16 +272,30 @@ public class LeapCard
         ArrayList<Stop> stops = Utility.routes.get(route);
 
         if(stops == null)
+        {
             return Validation.BAD_ROUTE;
+        }
 
         else if(Utility.getStopPosition(stops, start) == -1)
+        {
             return Validation.BAD_START;
+        }
 
         else if(Utility.getStopPosition(stops, destination) == -1)
+        {
             return Validation.BAD_DESTINATION;
+        }
 
         int distance = calculateDistance(stops, start, destination);
-        if(distance == 0) return Validation.ZERO_STOPS;
+        if(distance == 0)
+        {
+            return Validation.ZERO_STOPS;
+        }
+
+        else if(Utility.roundToTwoPlaces(balance - calculateFare(stops)) < 0)
+        {
+            return Validation.NOT_ENOUGH_MONEY;
+        }
 
         return Validation.VALID;
     }
