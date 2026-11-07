@@ -4,9 +4,10 @@ A simple mini-game program simulating everyday use of glorious Dublin Bus system
 See the [release history](https://github.com/xelllaaa1/TFI_Sim/releases) for what changed in each version.
 
 ## How to run
-1. Download the latest release .zip file.
-2. Unzip it into a folder.
-3. Run the `run.bat` file.
+1. Ensure you have Java 17+ installed.
+2. Download the latest release .zip file.
+3. Unzip it into a folder.
+4. Run the `run.bat` file.
 
 ## Future Plans
 - Yes, it is called **"TFI"**, not **Dublin Bus** Simulator. I am planning to add more transportation types to this program in the future.
