@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class Menu
@@ -92,13 +93,23 @@ public class Menu
 
     public String askUntilValid(String prompt, Predicate<String> isValid, String errorMessage)
     {
-        String input;
+        String input = "";
         boolean isGood;
         
         do
         {
             System.out.print(prompt);
-            input = Utility.scanner.nextLine().strip();
+            
+            try
+            {
+                input = Utility.scanner.nextLine().strip();
+            }
+            catch(NoSuchElementException ex)
+            {
+                System.err.print("\n[Error] Input ended, exiting...\n");
+                System.exit(1);
+            }
+
             isGood = isValid.test(input);
 
             if(!isGood)
@@ -133,7 +144,7 @@ public class Menu
                 System.out.println("\nFare: " + leap.getTripFare());
                 System.out.println("Current balance: " + leap.getBalance());
                 System.out.println("Distance travelled: " + ((double) leap.getTripDistance() / 1000) + " km");
-                System.out.println("Time spent: ~ " + time_spent + " minutes");
+                System.out.println("Time spent: ~ " + (int)time_spent + " minutes");
             }
             else
             {
