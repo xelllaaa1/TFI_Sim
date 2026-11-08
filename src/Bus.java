@@ -41,7 +41,7 @@ public class Bus
         // Handle bus state
         if(bus_state == Bus.State.NFULL)
         {
-            System.out.println("The bus is here, finally!");
+            System.out.println("\nThe bus is here, finally!");
             return;
         }
 
@@ -51,21 +51,21 @@ public class Bus
 
             if(bus_state == State.FULL)
             {
-                System.out.println("Darn it! This bus is full!");
+                System.out.println("\nDarn it! This bus is full!");
             }
             else if(bus_state == Bus.State.NIS)
             {
-                System.out.println("Really?! Not in service?! God dang it...");
+                System.out.println("\nReally?! Not in service?! God dang it...");
             }
             else
             {
-                System.out.println("Thank god!");
+                System.out.println("\nThank god!");
                 break;
             }
             
             resetBus();
             
-            System.out.println("Better luck with your next bus.. Here's Dublin Bus for ya!");
+            System.out.println("\nBetter luck with your next bus.. Here's Dublin Bus for ya!");
             try{Thread.sleep(3000);} catch(InterruptedException e ) {e.printStackTrace();}
         }
 

@@ -9,7 +9,7 @@ public class Main
         Person user = main_menu.initialiseUser();
 
         main_menu.menu(user);
-        
+        main_menu.printHistory(user.getLeapCard());
         Utility.scanner.close();
     }
 }

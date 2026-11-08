@@ -1,5 +1,6 @@
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
+import java.time.format.DateTimeFormatter;
 
 public class Menu
 {
@@ -11,6 +12,8 @@ public class Menu
     private static Predicate<String> validStop = s -> s.matches("[A-Za-z0-9 '.-]+") && (s.length() >= 3) && (s.length() <= 30);
     private static Predicate<String> validTopUp = s -> s.matches("\\d+(\\.[\\d]{1,2})?") && Double.parseDouble(s) >= 5 && Double.parseDouble(s) <= 100;
 
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    
     public Person initialiseUser()
     {
         String name, surname;
@@ -114,6 +117,16 @@ public class Menu
         System.out.printf("Topped-up with %.2f!\nNew balance: %.2f\n", amount, leap.getBalance());
     }
 
+    public void printHistory(LeapCard leap)
+    {
+        System.out.println("\nCard History:");
+        for(int i = leap.getHistory().size() - 1; i >= 0; i--)
+        {
+            HistoryEntry historyEntry = leap.getHistory().get(i);
+            System.out.printf("%s - %s\n", historyEntry.getTimeStamp().format(dateFormat), historyEntry.getDescription());
+        }
+    }
+
     public void menu(Person user)
     {
         boolean inUse = true;
@@ -139,7 +152,10 @@ public class Menu
 
                 while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))
                 {
-                    if(!askYesNo("Your balance is too low for this trip. Would you like to top-up?"))
+                    double fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
+                    System.err.printf("\n[Error] Insufficient balance: the trip costs %.2f but you have %.2f\n", fare, leap.getBalance());
+
+                    if(!askYesNo("Would you like to top-up?"))
                     {
                         break;
                     }
@@ -149,16 +165,16 @@ public class Menu
 
                 if(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute())))
                 {
-                    double time_spent = user.travel();
+                    double timeSpent = user.travel();
 
                     System.out.println("\nFare: " + leap.getTripFare());
                     System.out.println("Current balance: " + leap.getBalance());
                     System.out.println("Distance travelled: " + ((double) leap.getTripDistance() / 1000) + " km");
-                    System.out.println("Time spent: ~ " + (int)time_spent + " minutes");
+                    System.out.println("Time spent: ~ " + (int)timeSpent + " minutes");
                 }
                 else
                 {
-                    System.err.println("[Error] Insufficient balance, top up your card's balance");
+                    System.out.println("\nYou step off the bus without travelling");
                 }
             }
 

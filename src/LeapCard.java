@@ -15,12 +15,12 @@ public class LeapCard
     private int trip_distance;
     enum Validation {BAD_START, BAD_DESTINATION, BAD_ROUTE, ZERO_STOPS,  VALID}
     
-    private ArrayList<String> history = new ArrayList<String>();
+    private ArrayList<HistoryEntry> history = new ArrayList<HistoryEntry>();
 
     public LeapCard(Person owner)
     {
         cardNumber = String.format("%08d", Utility.random.nextInt(100000000));
-        history.add("Card #" + cardNumber + " activated.");
+        history.add(new HistoryEntry("Card #" + cardNumber + " activated."));
         
         this.owner = owner;
         
@@ -46,9 +46,9 @@ public class LeapCard
         return type;
     }
 
-    public ArrayList<String> getHistory()
+    public List<HistoryEntry> getHistory()
     {
-        return history;
+        return Collections.unmodifiableList(history);
     }
 
     public String getStart()
@@ -75,6 +75,7 @@ public class LeapCard
     {
         return trip_distance;
     }
+
     public void setStart(String start)
     {
         this.start = start;
@@ -114,6 +115,7 @@ public class LeapCard
         if(amount > 0)
         {
             balance = Utility.roundToTwoPlaces(balance + amount);
+            history.add(new HistoryEntry("Balance topped up by " + String.format("%.2f", amount)));
         }
         else
         {
@@ -126,19 +128,11 @@ public class LeapCard
         if(amount > 0)
         {
             balance = Utility.roundToTwoPlaces(balance - amount);
+            history.add(new HistoryEntry(String.format("Trip on %s: %s to %s: %.2f", route, start, destination, trip_fare)));
         }
         else
         {
             System.err.println("[Error] Amount has to be positive!");
-        }
-    }
-
-    public void printHistory()
-    {
-        System.out.println("\nCard History:");
-        for(int i = 0; i < history.size(); i++)
-        {
-            System.out.println(history.get(i));
         }
     }
 
