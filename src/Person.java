@@ -35,6 +35,28 @@ public class Person
         return leapCard;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setSurname(String surname)
+    {
+        this.surname = surname;
+    }
+
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+
+    public void printPersonDetails()
+    {
+        System.out.printf("  %-10s %s\n", "Name:", name);
+        System.out.printf("  %-10s %s\n", "Surname:", surname);
+        System.out.printf("  %-10s %d\n", "Age:", age);
+    }
+
     public double travel()
     {
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());

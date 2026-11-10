@@ -14,6 +14,12 @@ public class Bus
         return state;
     }
 
+    public static void printBusInfo(Bus bus)
+    {
+        System.out.println("\nPeople on board: " + bus.people_on_board);
+        System.out.println("State: " + bus.state + "\n");
+    }
+
     public void resetBus()
     {
         int service = Utility.random.nextInt(0,8);

@@ -115,7 +115,7 @@ public class LeapCard
         if(amount > 0)
         {
             balance = Utility.roundToTwoPlaces(balance + amount);
-            history.add(new HistoryEntry("Balance topped up by " + String.format("%.2f", amount)));
+            history.add(new HistoryEntry("Topped up EUR " + String.format("%.2f", amount)));
         }
         else
         {
@@ -128,7 +128,7 @@ public class LeapCard
         if(amount > 0)
         {
             balance = Utility.roundToTwoPlaces(balance - amount);
-            history.add(new HistoryEntry(String.format("Trip on %s: %s to %s: %.2f", route, start, destination, trip_fare)));
+            history.add(new HistoryEntry(String.format("Trip on route %s: %s -> %s (EUR %.2f)", route, start, destination, trip_fare)));
         }
         else
         {

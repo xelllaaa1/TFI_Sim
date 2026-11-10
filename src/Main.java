@@ -4,12 +4,11 @@ public class Main
     {
         Utility.routes = Utility.loadRoutes("resources/routes.txt");
         
-        Menu main_menu = new Menu();
+        Menu mainMenu = new Menu();
         
-        Person user = main_menu.initialiseUser();
+        Person user = mainMenu.initialiseUser();
 
-        main_menu.menu(user);
-        main_menu.printHistory(user.getLeapCard());
+        mainMenu.mainMenu(user);
         Utility.scanner.close();
     }
 }
