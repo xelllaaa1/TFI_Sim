@@ -199,6 +199,12 @@ public class Menu
         return input;
     }
 
+    // Waits for the player to press Enter, so a result stays readable before the screen is cleared.
+    private void pressEnterToContinue()
+    {
+        askUntilValid("\nPress Enter to continue...", s -> true, "");
+    }
+
     public void topUp(LeapCard leap)
     {
         double amount = Double.parseDouble(askUntilValid("Enter amount: ", validTopUp, "[Error] Amount must be at least 5 and at most 100 with up to 2 decimals"));
@@ -222,6 +228,7 @@ public class Menu
         boolean inUse = true;
         while(inUse)
         {
+            Utility.clearConsole();
             printHeader("CHANGE PERSONAL DETAILS");
             printOption(1, "Name");
             printOption(2, "Surname");
@@ -285,6 +292,7 @@ public class Menu
                         else
                         {
                             System.out.println("You have failed to enter sensible age. Age not changed.");
+                            pressEnterToContinue();
                             return;
                         }
                     }
@@ -297,6 +305,8 @@ public class Menu
                     return;
                 }
             }
+
+            pressEnterToContinue();
         }
     }
 
@@ -305,6 +315,7 @@ public class Menu
         boolean inUse = true;
         while(inUse)
         {
+            Utility.clearConsole();
             printHeader("ACCOUNT MANAGEMENT");
             printOption(1, "Top-up balance");
             printOption(2, "Print card history");
@@ -319,15 +330,20 @@ public class Menu
                 case 1 ->
                 {
                     topUp(user.getLeapCard());
+                    pressEnterToContinue();
                 }
                 case 2 ->
                 {
+                    Utility.clearConsole();
                     printHistory(user.getLeapCard());
+                    pressEnterToContinue();
                 }
                 case 3 ->
                 {
+                    Utility.clearConsole();
                     printHeader("PERSONAL DETAILS");
                     user.printPersonDetails();
+                    pressEnterToContinue();
                 }
                 case 4 ->
                 {
@@ -348,11 +364,13 @@ public class Menu
 
         while(inUse)
         {
+            Utility.clearConsole();
             printHeader("TRIP");
 
             if(!askTripDetails(user))
             {
                 System.out.println("\nTrip cancelled.");
+                pressEnterToContinue();
                 return;
             }
 
@@ -410,9 +428,11 @@ public class Menu
 
         // Greet the user and print their details.
         System.out.println("\nYou are standing alone on a feels-like almost desolate Dublin Bus stop on the edge of the city...");
+        pressEnterToContinue();
 
         while(inUse)
         {
+            Utility.clearConsole();
             printHeader("TFI SIMULATOR - MAIN MENU");
             printCardInfo(user);
             printOption(1, "Account management");
