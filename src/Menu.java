@@ -191,7 +191,7 @@ public class Menu
 
             if(!isGood)
             {
-                System.out.println(errorMessage + "\n");
+                System.err.println(errorMessage + "\n");
             }
         }
         while(!isGood);
@@ -280,9 +280,9 @@ public class Menu
                         }
                         else if(tries > 0)
                         {
-                            System.out.println("\n[Error] Your new age must not change your card type!");
-                            System.out.println("        For example, if you are 26 and want to change your age to 25,");
-                            System.out.println("        you would need a new Leap card, as that changes your card type.");
+                            System.err.println("\n[Error] Your new age must not change your card type!");
+                            System.err.println("        For example, if you are 26 and want to change your age to 25,");
+                            System.err.println("        you would need a new Leap card, as that changes your card type.");
                             System.out.println("\nTry to enter a new age that is within your card type's band.");
                             System.out.println("Tries left: " + tries + "\n");
                             tries -= 1;
@@ -400,14 +400,14 @@ public class Menu
 
                 if(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute())))
                 {
-                    double timeSpent = user.travel(bus);
+                    int timeSpent = user.travel(bus);
 
                     if(bus.eventHappened())
                     {
                         System.out.println("\n[Random Event] " + bus.getEvent().description());
                     }
 
-                    printTripSummary(leap, (int) timeSpent);
+                    printTripSummary(leap, timeSpent);
                 }
                 else
                 {
