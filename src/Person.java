@@ -57,7 +57,7 @@ public class Person
         System.out.printf("  %-10s %d\n", "Age:", age);
     }
 
-    public double travel()
+    public int travel(Bus bus)
     {
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
 
@@ -68,6 +68,11 @@ public class Person
         leapCard.setTripDistance(trip_distance);
         leapCard.spendBalance(trip_fare);
 
-        return leapCard.calculateTime(trip_distance);
+        int minutes = leapCard.calculateTime(trip_distance);
+        if(bus.eventHappened())
+        {
+            minutes += bus.getEvent().extraMinutes();
+        }
+        return minutes;
     }
 }

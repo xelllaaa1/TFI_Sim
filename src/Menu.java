@@ -238,12 +238,14 @@ public class Menu
                     stringInput = askUntilValid("Enter your new name: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Name must be 2-20 characters: letters, spaces, hyphens or apostrophes only");  
                     user.setName(stringInput);
                     System.out.printf("\nName changed to %s.\n", stringInput);
+                    user.getLeapCard().addHistory("Name changed to " + stringInput);
                 }
                 case 2 ->
                 {
                     stringInput = askUntilValid("Enter your new surname: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Surname must be 2-20 characters: letters, spaces, hyphens or apostrophes only");
                     user.setSurname(stringInput);
                     System.out.printf("\nSurname changed to %s.\n", stringInput);
+                    user.getLeapCard().addHistory("Surname changed to " + stringInput);
                 }
                 case 3 ->
                 {
@@ -282,12 +284,13 @@ public class Menu
                         }
                         else
                         {
-                            System.out.println("You have failed to enter sensible age. Exiting...");
-                            System.exit(1);
+                            System.out.println("You have failed to enter sensible age. Age not changed.");
+                            return;
                         }
                     }
 
                     System.out.printf("\nAge changed to %d.\n", newAge);
+                    user.getLeapCard().addHistory("Age changed to " + newAge);
                 }
                 case 4 ->
                 {
@@ -379,7 +382,12 @@ public class Menu
 
                 if(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute())))
                 {
-                    double timeSpent = user.travel();
+                    double timeSpent = user.travel(bus);
+
+                    if(bus.eventHappened())
+                    {
+                        System.out.println("\n[Random Event] " + bus.getEvent().description());
+                    }
 
                     printTripSummary(leap, (int) timeSpent);
                 }

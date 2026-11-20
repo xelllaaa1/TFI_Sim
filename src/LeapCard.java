@@ -20,7 +20,7 @@ public class LeapCard
     public LeapCard(Person owner)
     {
         cardNumber = String.format("%08d", Utility.random.nextInt(100000000));
-        history.add(new HistoryEntry("Card #" + cardNumber + " activated."));
+        history.add(new HistoryEntry("Card #" + cardNumber + " activated"));
         
         this.owner = owner;
         
@@ -49,6 +49,11 @@ public class LeapCard
     public List<HistoryEntry> getHistory()
     {
         return Collections.unmodifiableList(history);
+    }
+
+    public void addHistory(String description)
+    {
+        history.add(new HistoryEntry(description));
     }
 
     public String getStart()

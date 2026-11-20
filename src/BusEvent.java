@@ -1,0 +1,1 @@
+public record BusEvent(String description, int extraMinutes) {}
