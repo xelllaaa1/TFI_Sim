@@ -38,7 +38,7 @@ public class Menu
         System.out.printf("  %d. %s\n", number, text);
     }
 
-    // Prints the card holder, card number, card type and balance, e.g. above the main menu options.
+    // Prints the card holder, card number, card type, balance and cash, e.g. above the main menu options.
     private void printCardInfo(Person user)
     {
         LeapCard leap = user.getLeapCard();
@@ -46,6 +46,7 @@ public class Menu
         System.out.printf("  %-10s %s %s\n", "Holder:", user.getName(), user.getSurname());
         System.out.printf("  %-10s #%s (%s)\n", "Card:", leap.getCardNumber(), leap.getType());
         System.out.printf("  %-10s EUR %.2f\n", "Balance:", leap.getBalance());
+        System.out.printf("  %-10s EUR %.2f\n", "Cash:", user.getCash());
         System.out.println("-".repeat(WIDTH));
     }
 
@@ -61,8 +62,9 @@ public class Menu
     }
 
     // Prints the summary of a finished trip as a small aligned receipt.
-    private void printTripSummary(LeapCard leap, int minutes)
+    private void printTripSummary(Person user, int minutes)
     {
+        LeapCard leap = user.getLeapCard();
         String line = "-".repeat(WIDTH);
 
         System.out.println("\n" + line);
@@ -75,6 +77,7 @@ public class Menu
         System.out.printf("  %-10s ~ %s\n", "Time:", formatMinutes(minutes));
         System.out.printf("  %-10s EUR %.2f\n", "Fare:", leap.getTripFare());
         System.out.printf("  %-10s EUR %.2f\n", "Balance:", leap.getBalance());
+        System.out.printf("  %-10s EUR %.2f\n", "Cash:", user.getCash());
         System.out.println(line);
     }
 
@@ -82,15 +85,17 @@ public class Menu
     {
         String name, surname;
         int age;
+        double cash;
 
         // Request data
         name = askUntilValid("Enter your name: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Name must be 2-20 characters: letters, spaces, hyphens or apostrophes only");  
         surname = askUntilValid("Enter your surname: ", notBlank.and(lengthBounds).and(validSymbols), "[Error] Surname must be 2-20 characters: letters, spaces, hyphens or apostrophes only");
         age = Integer.parseInt(askUntilValid("Enter your age: ", validAge, "[Error] Age must be a number between 5 and 99"));
+        cash = Utility.roundToTwoPlaces(Utility.random.nextDouble(1.0, 5.0));
 
         printHeader("WELCOME TO DUBLIN, " + name.toUpperCase() + "!");
         System.out.println("  Your Leap card has been successfully activated.");
-        return new Person(name, surname, age);
+        return new Person(name, surname, age, cash);
     }
 
     // Asks for the route and both stops. Returns false if the player typed the cancel word
@@ -407,7 +412,7 @@ public class Menu
                         System.out.println("\n[Random Event] " + bus.getEvent().description());
                     }
 
-                    printTripSummary(leap, timeSpent);
+                    printTripSummary(user, timeSpent);
                 }
                 else
                 {
