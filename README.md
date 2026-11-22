@@ -15,4 +15,4 @@ See the [release history](https://github.com/xelllaaa1/TFI_Sim/releases) for wha
 - Add an interactive GUI.
 - Add genuine navigation from point A to point B using algorithms.
 
-### Total Time Spent: 27.5 hours.
+### Total Time Spent: 28 hours.
