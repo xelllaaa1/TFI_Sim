@@ -6,10 +6,10 @@ public class Bus
     State state;
     int people_on_board;
 
-    public Bus()
+    public Bus(Person user)
     {
         resetBus();
-        event = EventPool.roll();
+        event = EventPool.roll(user.getCash());
     }
 
     public State getState()

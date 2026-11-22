@@ -387,7 +387,7 @@ public class Menu
             }
             else
             {
-                Bus bus = new Bus();
+                Bus bus = new Bus(user);
                 bus.waitForBus();
 
                 while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventPool
@@ -15,11 +16,22 @@ public class EventPool
         new BusEvent("You were fidgeting with a 1 euro coin and lost it!", 0, -1)
     );
 
-    public static BusEvent roll()
+    public static BusEvent roll(double cash)
     {
         if(Utility.random.nextInt(100) < EVENT_CHANCE)
         {
-            return EVENTS.get(Utility.random.nextInt(0, EVENTS.size()));
+            ArrayList<BusEvent> possibleEvents = new ArrayList<>();
+
+            for(int i = 0; i < EVENTS.size(); i++)
+            {
+                BusEvent event = EVENTS.get(i);
+                if(Utility.roundToTwoPlaces((cash + event.cashChange())) >= 0)
+                {
+                    possibleEvents.add(event);
+                }
+            }
+            
+            return possibleEvents.get(Utility.random.nextInt(0, possibleEvents.size()));
         }
         
         return null;
