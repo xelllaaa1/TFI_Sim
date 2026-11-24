@@ -6,10 +6,9 @@ public class Bus
     State state;
     int people_on_board;
 
-    public Bus(Person user)
+    public Bus()
     {
         resetBus();
-        event = EventPool.roll(user.getCash());
     }
 
     public State getState()
@@ -20,6 +19,11 @@ public class Bus
     public BusEvent getEvent()
     {
         return event;
+    }
+
+    public void rollEvent(double cash)
+    {
+        event = EventPool.roll(cash);
     }
 
     public boolean eventHappened()

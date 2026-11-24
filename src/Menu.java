@@ -11,6 +11,7 @@ public class Menu
     private static Predicate<String> validRoute = s -> s.matches("[A-Za-z0-9]+") && (s.length() <= 3);
     private static Predicate<String> validStop = s -> s.matches("[A-Za-z0-9 '.-]+") && (s.length() >= 3) && (s.length() <= 30);
     private static Predicate<String> validTopUp = s -> s.matches("\\d+(\\.[\\d]{1,2})?") && Double.parseDouble(s) >= 5 && Double.parseDouble(s) <= 100;
+    private static Predicate<String> validPaymentType = s -> s.equalsIgnoreCase("CARD") || s.equalsIgnoreCase("CASH");
 
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -170,7 +171,7 @@ public class Menu
         printOption(2, "No");
         int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 2), "[Error] Choice must be 1 (\"Yes\") or 2 (\"No\")"));
 
-       return choice == 1;
+        return choice == 1;
     }
 
     public String askUntilValid(String prompt, Predicate<String> isValid, String errorMessage)
@@ -362,6 +363,20 @@ public class Menu
         }
     }
 
+    public Person.Payment askPaymentType()
+    {
+        String answer = askUntilValid("Enter payment type(Card or Cash): ", validPaymentType, "[Error] Your answer must be \"card\" or \"cash\".");
+        
+        if(answer.equalsIgnoreCase("CARD"))
+        {
+            return Person.Payment.CARD;
+        }
+        else
+        {
+            return Person.Payment.CASH;
+        }
+    }
+
     public void tripMenu(Person user)
     {
         boolean inUse = true;
@@ -387,25 +402,38 @@ public class Menu
             }
             else
             {
-                Bus bus = new Bus(user);
+                Bus bus = new Bus();
                 bus.waitForBus();
+                Person.Payment payment = askPaymentType();
+                double fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
 
-                while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))
+                if(payment == Person.Payment.CARD)
                 {
-                    double fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
-                    System.err.printf("\n[Error] Insufficient balance: the trip costs EUR %.2f but you have EUR %.2f.\n", fare, leap.getBalance());
-
-                    if(!askYesNo("Would you like to top-up?"))
+                    while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))
                     {
-                        break;
-                    }
+                        fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
+                        System.err.printf("\n[Error] Insufficient balance: the trip costs EUR %.2f but you have EUR %.2f.\n", fare, leap.getBalance());
 
-                    topUp(leap);
+                        if(!askYesNo("Would you like to top-up?"))
+                        {
+                            break;
+                        }
+
+                        topUp(leap);
+                    }
+                }
+                else
+                {
+                    if(!user.enoughCashForTrip(fare))
+                    {
+                        System.err.printf("\n[Error] Insufficient cash: the trip costs EUR %.2f but you have EUR %.2f.\n", fare, user.getCash());
+                    }
                 }
 
-                if(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute())))
+                if((payment == Person.Payment.CARD && leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))) || 
+                (payment == Person.Payment.CASH && user.enoughCashForTrip(fare)))
                 {
-                    int timeSpent = user.travel(bus);
+                    int timeSpent = user.travel(bus, payment);
 
                     if(bus.eventHappened())
                     {

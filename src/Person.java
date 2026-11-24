@@ -7,6 +7,8 @@ public class Person
     private LeapCard leapCard;
     private double cash;
 
+    enum Payment {CASH, CARD};
+
     public Person(String name, String surname, int age, double cash)
     {
         this.name = name;
@@ -69,18 +71,32 @@ public class Person
         cash = Utility.roundToTwoPlaces(Math.max(0.0, cash + amount));
     }
 
-    public int travel(Bus bus)
+    public boolean enoughCashForTrip(double fare)
+    {
+        return cash >= fare;
+    }
+
+    public int travel(Bus bus, Payment payment)
     {
         ArrayList<Stop> stops = Utility.routes.get(leapCard.getRoute());
 
         double trip_fare = leapCard.calculateFare(stops);
         int trip_distance = leapCard.calculateDistance(stops, leapCard.getStart(), leapCard.getDestination());
-
         leapCard.setTripFare(trip_fare);
         leapCard.setTripDistance(trip_distance);
-        leapCard.spendBalance(trip_fare);
+
+        if(payment == Payment.CARD)
+        {
+            leapCard.spendBalance(trip_fare);
+        }
+        else
+        {
+            changeCash(-trip_fare);
+        }
 
         int minutes = leapCard.calculateTime(trip_distance);
+        
+        bus.rollEvent(cash);
         BusEvent event = bus.getEvent();
         if(bus.eventHappened())
         {
