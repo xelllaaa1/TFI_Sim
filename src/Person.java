@@ -7,7 +7,7 @@ public class Person
     private LeapCard leapCard;
     private double cash;
 
-    enum Payment {CASH, CARD};
+    enum Payment {CASH, CARD, NONE};
 
     public Person(String name, String surname, int age, double cash)
     {

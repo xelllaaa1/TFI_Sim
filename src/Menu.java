@@ -404,34 +404,24 @@ public class Menu
             {
                 Bus bus = new Bus();
                 bus.waitForBus();
+
                 Person.Payment payment = askPaymentType();
                 double fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
 
-                if(payment == Person.Payment.CARD)
+                while(payment != Person.Payment.NONE && !canAfford(user, payment, fare))
                 {
-                    while(!(leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))))
+                    if(payment == Person.Payment.CARD)
                     {
-                        fare = leap.calculateFare(Utility.routes.get(leap.getRoute()));
                         System.err.printf("\n[Error] Insufficient balance: the trip costs EUR %.2f but you have EUR %.2f.\n", fare, leap.getBalance());
-
-                        if(!askYesNo("Would you like to top-up?"))
-                        {
-                            break;
-                        }
-
-                        topUp(leap);
                     }
-                }
-                else
-                {
-                    if(!user.enoughCashForTrip(fare))
+                    else if(payment == Person.Payment.CASH)
                     {
                         System.err.printf("\n[Error] Insufficient cash: the trip costs EUR %.2f but you have EUR %.2f.\n", fare, user.getCash());
                     }
+                    payment = paymentTypeSwitchMenu(user, payment);
                 }
 
-                if((payment == Person.Payment.CARD && leap.enoughMoneyForTrip(Utility.routes.get(leap.getRoute()))) || 
-                (payment == Person.Payment.CASH && user.enoughCashForTrip(fare)))
+                if(payment != Person.Payment.NONE)
                 {
                     int timeSpent = user.travel(bus, payment);
 
@@ -455,6 +445,66 @@ public class Menu
         }
     }
 
+    public Person.Payment paymentTypeSwitchMenu(Person user, Person.Payment paymentType)
+    {
+        printOption(1, "Top up card");
+        if(paymentType == Person.Payment.CARD)
+        {
+            printOption(2, "Pay in cash");
+        }
+        else if(paymentType == Person.Payment.CASH)
+        {
+            printOption(2, "Pay by card");
+        }
+        printOption(3, "Step off the bus");
+
+        int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 3), "[Error] Choice must be \"1\", \"2\" or \"3\"!"));
+        switch(choice)
+        {
+            case 1 ->
+            {
+                topUp(user.getLeapCard());
+                return Person.Payment.CARD;
+            }
+            case 2 ->
+            {
+                if(paymentType == Person.Payment.CARD)
+                {
+                    return Person.Payment.CASH;
+                }
+                else
+                {
+                    return Person.Payment.CARD;
+                }
+            }
+            case 3 ->
+            {
+                return Person.Payment.NONE;
+            }
+            default ->
+            {
+                return Person.Payment.NONE;
+            }
+        }
+    }
+
+    public boolean canAfford(Person user, Person.Payment paymentType, double fare)
+    {
+        LeapCard leap = user.getLeapCard();
+        if(paymentType == Person.Payment.CARD)
+        {
+            return leap.enoughMoneyForTrip(fare);
+        }
+        else if(paymentType == Person.Payment.CASH)
+        {
+            return user.enoughCashForTrip(fare);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void mainMenu(Person user)
     {
         boolean inUse = true;
@@ -472,7 +522,7 @@ public class Menu
             printOption(2, "Trip");
             printOption(3, "Exit");
 
-            int choice = Integer.parseInt(askUntilValid("Enter choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 3), "[Error] Choice must be \"1\", \"2\" or \"3\"!"));
+            int choice = Integer.parseInt(askUntilValid("Enter your choice: ", s -> Utility.isWholeNumber(s) && (Integer.parseInt(s) >= 1) && (Integer.parseInt(s) <= 3), "[Error] Choice must be \"1\", \"2\" or \"3\"!"));
 
             switch(choice)
             {

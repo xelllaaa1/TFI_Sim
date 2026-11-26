@@ -294,8 +294,8 @@ public class LeapCard
         return Validation.VALID;
     }
 
-    public boolean enoughMoneyForTrip(ArrayList<Stop> stops)
+    public boolean enoughMoneyForTrip(double fare)
     {
-        return Utility.roundToTwoPlaces(balance - calculateFare(stops)) >= 0;
+        return Utility.roundToTwoPlaces(balance - fare) >= 0;
     }
 }
